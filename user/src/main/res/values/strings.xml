@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_users">👤  Users</string>
+    <string name="title_user_details">User Details</string>
+    <string name="button_user_posts">User Posts</string>
+</resources>

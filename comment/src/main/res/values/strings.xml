@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_comments">💬  Comments</string>
+    <string name="title_comment_details">Comment Details</string>
+    <string name="title_post_comments">Post Comments</string>
+    <string name="button_parent_posts">Parent Post</string>
+</resources>

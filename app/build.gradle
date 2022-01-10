@@ -1,0 +1,81 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+}
+
+android {
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        applicationId "com.github.wlara.nextgen.nextgen"
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+        versionCode versions.versionCode
+        versionName versions.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        useIR = true
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion versions.androidXCompose
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+}
+
+dependencies {
+    implementation(project(":core"))
+    implementation(project(':webviewer'))
+    implementation(project(':user'))
+    implementation(project(':post'))
+    implementation(project(':comment'))
+    implementation androidXDependencies.coreKtx
+    implementation androidXDependencies.appCompat
+    implementation androidXDependencies.lifecycleKtx
+    implementation androidXDependencies.composeUi
+    implementation androidXDependencies.composeUiToolingPreview
+    implementation androidXDependencies.composeMaterial
+    implementation androidXDependencies.composeMaterialIcons
+    implementation androidXDependencies.activityCompose
+    implementation androidXDependencies.navigationCompose
+    implementation androidXDependencies.hiltNavigationCompose
+
+    implementation googleDependencies.accompanistNavigation
+    implementation googleDependencies.material
+    implementation googleDependencies.hiltAndroid
+    kapt googleDependencies.hiltCompiler
+
+    implementation thirdPartyDependencies.kotlinReflection
+    implementation thirdPartyDependencies.ktorClientAndroid
+    implementation thirdPartyDependencies.ktorClientSerialization
+    implementation thirdPartyDependencies.ktorClientLogging
+
+    debugImplementation androidXDependencies.composeUiTooling
+
+    testImplementation testDependencies.junit
+}

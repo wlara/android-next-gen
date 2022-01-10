@@ -1,0 +1,22 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    apply from: 'dependencies.gradle'
+
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url "https://artifactory.nike.com/artifactory/maven"
+        }
+    }
+    dependencies {
+        classpath pluginDependencies.android
+        classpath pluginDependencies.kotlin
+        classpath pluginDependencies.kotlinSerialization
+        classpath pluginDependencies.hilt
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

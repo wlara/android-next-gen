@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_posts">📮  Posts</string>
+    <string name="title_post_details">Post Details</string>
+    <string name="title_user_posts">User Posts</string>
+    <string name="button_author">Author</string>
+    <string name="button_comments">Comments</string>
+</resources>
