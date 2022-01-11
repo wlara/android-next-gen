@@ -9,7 +9,7 @@ android {
     compileSdk versions.compileSdk
 
     defaultConfig {
-        applicationId "com.github.wlara.nextgen.nextgen"
+        applicationId "com.github.wlara.nextgen"
         minSdk versions.minSdk
         targetSdk versions.targetSdk
         versionCode versions.versionCode

@@ -3,13 +3,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url "https://artifactory.nike.com/artifactory/maven"
-        }
         jcenter() // Warning: this repository is going to shut down soon
     }
 }
-rootProject.name = "mpe.demo-next-gen"
+rootProject.name = "next-gen"
 include ':app'
 include ':user'
 include ':core'
