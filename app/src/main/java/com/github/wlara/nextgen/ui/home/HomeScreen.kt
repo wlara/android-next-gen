@@ -26,17 +26,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.wlara.nextgen.AppNavigation
 import com.github.wlara.nextgen.R
-import com.github.wlara.nextgen.Screen
-import com.github.wlara.nextgen.allScreens
+import com.github.wlara.nextgen.NavNode
+import com.github.wlara.nextgen.AllNavNodes
 import kotlinx.coroutines.flow.collect
 
 @Composable
 internal fun HomeScreen(navController: NavHostController = rememberNavController()) {
     Scaffold(
         bottomBar = {
-            val currentRootScreen by navController.currentRootScreenAsState()
+            val currentRootNode by navController.currentRootNodeAsState()
             HomeBottomNavigation(
-                currentRootScreen = currentRootScreen,
+                currentRootNode = currentRootNode,
                 onNavigationSelected = { navController.navigate(it.route) }
             )
         }
@@ -49,27 +49,27 @@ internal fun HomeScreen(navController: NavHostController = rememberNavController
 
 @Composable
 internal fun HomeBottomNavigation(
-    currentRootScreen: Screen,
-    onNavigationSelected: (Screen) -> Unit
+    currentRootNode: NavNode,
+    onNavigationSelected: (NavNode) -> Unit
 ) {
     BottomNavigation {
         HomeBottomNavigationItem(
             icon = Icons.Filled.Forum,
-            selected = currentRootScreen == Screen.PostRoot,
+            selected = currentRootNode == NavNode.PostRoot,
             label = stringResource(R.string.label_posts),
-            onClick = { onNavigationSelected(Screen.PostRoot) }
+            onClick = { onNavigationSelected(NavNode.PostRoot) }
         )
         HomeBottomNavigationItem(
             icon = Icons.Filled.Comment,
-            selected = currentRootScreen == Screen.CommentRoot,
+            selected = currentRootNode == NavNode.CommentRoot,
             label = stringResource(R.string.label_comments),
-            onClick = { onNavigationSelected(Screen.CommentRoot) }
+            onClick = { onNavigationSelected(NavNode.CommentRoot) }
         )
         HomeBottomNavigationItem(
             icon = Icons.Filled.People,
-            selected = currentRootScreen == Screen.UserRoot,
+            selected = currentRootNode == NavNode.UserRoot,
             label = stringResource(R.string.label_users),
-            onClick = { onNavigationSelected(Screen.UserRoot) }
+            onClick = { onNavigationSelected(NavNode.UserRoot) }
         )
     }
 }
@@ -90,14 +90,14 @@ private fun RowScope.HomeBottomNavigationItem(
 }
 
 @Composable
-private fun NavController.currentRootScreenAsState(): State<Screen> {
-    val currentRootScreen = remember { mutableStateOf<Screen>(Screen.PostRoot) }
+private fun NavController.currentRootNodeAsState(): State<NavNode> {
+    val currentRootNode = remember { mutableStateOf<NavNode>(NavNode.PostRoot) }
     LaunchedEffect(this) {
         currentBackStackEntryFlow.collect { entry ->
-            allScreens.find { entry.destination.parent?.route == it.route }?.let {
-                currentRootScreen.value = it
+            AllNavNodes.find { entry.destination.parent?.route == it.route }?.let {
+                currentRootNode.value = it
             }
         }
     }
-    return currentRootScreen
+    return currentRootNode
 }

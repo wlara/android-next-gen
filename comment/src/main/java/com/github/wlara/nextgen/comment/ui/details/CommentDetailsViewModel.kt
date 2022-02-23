@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.wlara.nextgen.core.ext.friendlyMessage
 import com.github.wlara.nextgen.comment.model.Comment
 import com.github.wlara.nextgen.comment.repo.CommentRepository
-import com.github.wlara.nextgen.core.navigation.ARG_COMMENT_ID
+import com.github.wlara.nextgen.core.navigation.ArgCommentId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +30,7 @@ class CommentDetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CommentDetailsUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val commentId = savedStateHandle.get<Int>(ARG_COMMENT_ID)!!
+    private val commentId = savedStateHandle.get<Int>(ArgCommentId)!!
 
     init {
         refresh()

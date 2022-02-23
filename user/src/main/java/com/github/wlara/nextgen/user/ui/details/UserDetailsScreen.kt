@@ -32,7 +32,7 @@ fun UserDetailsScreen(
     userId: Int,
     onShowUserPosts: (Int) -> Unit,
     onNavigateUp: () -> Unit,
-    viewModel: UserDetailsViewModel = hiltViewModel<UserDetailsViewModel>()
+    viewModel: UserDetailsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val scaffoldState = rememberScaffoldState()

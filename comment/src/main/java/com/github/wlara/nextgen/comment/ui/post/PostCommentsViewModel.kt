@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.wlara.nextgen.core.ext.friendlyMessage
 import com.github.wlara.nextgen.comment.model.Comment
 import com.github.wlara.nextgen.comment.repo.CommentRepository
-import com.github.wlara.nextgen.core.navigation.ARG_POST_ID
+import com.github.wlara.nextgen.core.navigation.ArgPostId
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,7 +30,7 @@ class PostCommentsViewModel @Inject constructor(
 
     val uiState = _uiState.asStateFlow()
 
-    private val postId = savedStateHandle.get<Int>(ARG_POST_ID)!!
+    private val postId = savedStateHandle.get<Int>(ArgPostId)!!
 
     init {
         refresh()

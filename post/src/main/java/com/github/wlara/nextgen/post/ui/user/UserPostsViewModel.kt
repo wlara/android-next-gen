@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.wlara.nextgen.core.ext.friendlyMessage
-import com.github.wlara.nextgen.core.navigation.ARG_USER_ID
+import com.github.wlara.nextgen.core.navigation.ArgUserId
 import com.github.wlara.nextgen.post.model.Post
 import com.github.wlara.nextgen.post.repo.PostRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +30,7 @@ class UserPostsViewModel @Inject constructor(
 
     val uiState = _uiState.asStateFlow()
 
-    private val userId = savedStateHandle.get<Int>(ARG_USER_ID)!!
+    private val userId = savedStateHandle.get<Int>(ArgUserId)!!
 
     init {
         refresh()

@@ -14,15 +14,15 @@ import com.github.wlara.nextgen.comment.ui.details.CommentDetailsScreen
 import com.github.wlara.nextgen.comment.ui.landing.CommentLandingScreen
 import com.github.wlara.nextgen.comment.ui.post.PostCommentsScreen
 import com.github.wlara.nextgen.core.ext.encodeUrl
-import com.github.wlara.nextgen.core.navigation.ARG_COMMENT_ID
-import com.github.wlara.nextgen.core.navigation.ARG_POST_ID
-import com.github.wlara.nextgen.core.navigation.ARG_USER_ID
-import com.github.wlara.nextgen.core.navigation.DEEPLINK_COMMENT_ID
-import com.github.wlara.nextgen.core.navigation.DEEPLINK_POST_ID
-import com.github.wlara.nextgen.core.navigation.DEEPLINK_USER_ID
-import com.github.wlara.nextgen.core.navigation.URL_RAW_COMMENTS
-import com.github.wlara.nextgen.core.navigation.URL_RAW_POSTS
-import com.github.wlara.nextgen.core.navigation.URL_RAW_USERS
+import com.github.wlara.nextgen.core.navigation.ArgCommentId
+import com.github.wlara.nextgen.core.navigation.ArgPostId
+import com.github.wlara.nextgen.core.navigation.ArgUserId
+import com.github.wlara.nextgen.core.navigation.DeeplinkCommentId
+import com.github.wlara.nextgen.core.navigation.DeeplinkPostId
+import com.github.wlara.nextgen.core.navigation.DeeplinkUserId
+import com.github.wlara.nextgen.core.navigation.UrlRawComments
+import com.github.wlara.nextgen.core.navigation.UrlRawPosts
+import com.github.wlara.nextgen.core.navigation.UrlRawUsers
 import com.github.wlara.nextgen.post.ui.details.PostDetailsScreen
 import com.github.wlara.nextgen.post.ui.landing.PostLandingScreen
 import com.github.wlara.nextgen.post.ui.user.UserPostsScreen
@@ -34,61 +34,61 @@ import com.github.wlara.nextgen.webviewer.WebViewerActivity
 // https://medium.com/google-developer-experts/navigating-in-jetpack-compose-78c78d365c6a
 // https://github.com/chrisbanes/tivi/blob/3de631a945d371326f7b817a3bfadcdae55275a2/app/src/main/java/app/tivi/AppNavigation.kt
 
-sealed class Screen(
+sealed class NavNode(
     val route: String
 ) {
-    object PostRoot : Screen("post-root")
+    object PostRoot : NavNode("post-root")
 
-    object PostLanding : Screen("post-landing")
+    object PostLanding : NavNode("post-landing")
 
-    object PostDetails : Screen("post-details/{$ARG_POST_ID}") {
+    object PostDetails : NavNode("post-details/{$ArgPostId}") {
         fun routeOf(postId: Int) = "post-details/$postId"
     }
 
-    object UserPosts : Screen("user-posts/{$ARG_USER_ID}") {
+    object UserPosts : NavNode("user-posts/{$ArgUserId}") {
         fun routeOf(userId: Int) = "user-posts/$userId"
     }
 
-    object CommentRoot : Screen("comment-root")
+    object CommentRoot : NavNode("comment-root")
 
-    object CommentLanding : Screen("comment-landing")
+    object CommentLanding : NavNode("comment-landing")
 
-    object CommentDetails : Screen("comment-details/{$ARG_COMMENT_ID}") {
+    object CommentDetails : NavNode("comment-details/{$ArgCommentId}") {
         fun routeOf(commentId: Int) = "comment-details/$commentId"
     }
 
-    object PostComments : Screen("post-comments/{$ARG_POST_ID}") {
+    object PostComments : NavNode("post-comments/{$ArgPostId}") {
         fun routeOf(postId: Int) = "post-comments/$postId"
     }
 
-    object UserRoot : Screen("user-root")
+    object UserRoot : NavNode("user-root")
 
-    object UserLanding : Screen("user-landing")
+    object UserLanding : NavNode("user-landing")
 
-    object UserDetails : Screen("user-details/{$ARG_USER_ID}") {
+    object UserDetails : NavNode("user-details/{$ArgUserId}") {
         fun routeOf(userId: Int) = "user-details/$userId"
     }
 
-    object WebViewer : Screen(
+    object WebViewer : NavNode(
         "web-viewer/{${WebViewerActivity.EXTRA_URL}}"
     ) {
         fun routeOf(url: String) = "web-viewer/${url.encodeUrl()}"
     }
 }
 
-val allScreens: List<Screen>
-    get() = Screen::class.sealedSubclasses.map { it.objectInstance as Screen }
+val AllNavNodes: List<NavNode>
+    get() = NavNode::class.sealedSubclasses.map { it.objectInstance as NavNode }
 
 @Composable
 fun AppNavigation(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = Screen.PostRoot.route
+        startDestination = NavNode.PostRoot.route
     ) {
         addPostTree(navController)
         addCommentTree(navController)
         addUserTree(navController)
-        addWebViewerScreen()
+        addWebViewerNode()
     }
 }
 
@@ -96,55 +96,55 @@ fun AppNavigation(navController: NavHostController) {
 
 private fun NavGraphBuilder.addPostTree(navController: NavHostController) {
     navigation(
-        route = Screen.PostRoot.route,
-        startDestination = Screen.PostLanding.route
+        route = NavNode.PostRoot.route,
+        startDestination = NavNode.PostLanding.route
     ) {
-        addPostLandingScreen(navController)
-        addPostDetailsScreen(navController)
-        addPostCommentsScreen(navController)
+        addPostLandingNode(navController)
+        addPostDetailsNode(navController)
+        addPostCommentsNode(navController)
     }
 }
 
-private fun NavGraphBuilder.addPostLandingScreen(navController: NavHostController) {
-    composable(Screen.PostLanding.route) {
+private fun NavGraphBuilder.addPostLandingNode(navController: NavHostController) {
+    composable(NavNode.PostLanding.route) {
         PostLandingScreen(
-            onShowPostDetails = { navController.navigate(Screen.PostDetails.routeOf(it)) },
-            onShowRawData = { navController.navigate(Screen.WebViewer.routeOf(URL_RAW_POSTS)) }
+            onShowPostDetails = { navController.navigate(NavNode.PostDetails.routeOf(it)) },
+            onShowRawData = { navController.navigate(NavNode.WebViewer.routeOf(UrlRawPosts)) }
         )
     }
 }
 
-private fun NavGraphBuilder.addPostDetailsScreen(navController: NavHostController) {
+private fun NavGraphBuilder.addPostDetailsNode(navController: NavHostController) {
     composable(
-        route = Screen.PostDetails.route,
+        route = NavNode.PostDetails.route,
         arguments = listOf(
-            navArgument(ARG_POST_ID) { type = NavType.IntType }
+            navArgument(ArgPostId) { type = NavType.IntType }
         ),
         deepLinks = listOf(
             navDeepLink {
-                uriPattern = DEEPLINK_POST_ID
+                uriPattern = DeeplinkPostId
             }
         )
     ) { entry ->
         PostDetailsScreen(
-            postId = entry.arguments?.getInt(ARG_POST_ID)!!,
-            onShowUserDetails = { navController.navigate(Screen.UserDetails.routeOf(it)) },
-            onShowPostComments = { navController.navigate(Screen.PostComments.routeOf(it)) },
+            postId = entry.arguments?.getInt(ArgPostId)!!,
+            onShowUserDetails = { navController.navigate(NavNode.UserDetails.routeOf(it)) },
+            onShowPostComments = { navController.navigate(NavNode.PostComments.routeOf(it)) },
             onNavigateUp = { navController.popBackStack() }
         )
     }
 }
 
-private fun NavGraphBuilder.addUserPostsScreen(navController: NavHostController) {
+private fun NavGraphBuilder.addUserPostsNode(navController: NavHostController) {
     composable(
-        route = Screen.UserPosts.route,
+        route = NavNode.UserPosts.route,
         arguments = listOf(
-            navArgument(ARG_USER_ID) { type = NavType.IntType }
+            navArgument(ArgUserId) { type = NavType.IntType }
         )
     ) { entry ->
         UserPostsScreen(
-            userId = entry.arguments?.getInt(ARG_USER_ID)!!,
-            onShowPostDetails = { navController.navigate(Screen.PostDetails.routeOf(it)) },
+            userId = entry.arguments?.getInt(ArgUserId)!!,
+            onShowPostDetails = { navController.navigate(NavNode.PostDetails.routeOf(it)) },
             onNavigateUp = { navController.popBackStack() }
         )
     }
@@ -155,53 +155,53 @@ private fun NavGraphBuilder.addUserPostsScreen(navController: NavHostController)
 
 private fun NavGraphBuilder.addCommentTree(navController: NavHostController) {
     navigation(
-        route = Screen.CommentRoot.route,
-        startDestination = Screen.CommentLanding.route
+        route = NavNode.CommentRoot.route,
+        startDestination = NavNode.CommentLanding.route
     ) {
-        addCommentLandingScreen(navController)
-        addCommentDetailsScreen(navController)
+        addCommentLandingNode(navController)
+        addCommentDetailsNode(navController)
     }
 }
 
-private fun NavGraphBuilder.addCommentLandingScreen(navController: NavHostController) {
-    composable(Screen.CommentLanding.route) {
+private fun NavGraphBuilder.addCommentLandingNode(navController: NavHostController) {
+    composable(NavNode.CommentLanding.route) {
         CommentLandingScreen(
-            onShowCommentDetails = { navController.navigate(Screen.CommentDetails.routeOf(it)) },
-            onShowRawData = { navController.navigate(Screen.WebViewer.routeOf(URL_RAW_COMMENTS)) }
+            onShowCommentDetails = { navController.navigate(NavNode.CommentDetails.routeOf(it)) },
+            onShowRawData = { navController.navigate(NavNode.WebViewer.routeOf(UrlRawComments)) }
         )
     }
 }
 
-private fun NavGraphBuilder.addCommentDetailsScreen(navController: NavHostController) {
+private fun NavGraphBuilder.addCommentDetailsNode(navController: NavHostController) {
     composable(
-        route = Screen.CommentDetails.route,
+        route = NavNode.CommentDetails.route,
         arguments = listOf(
-            navArgument(ARG_COMMENT_ID) { type = NavType.IntType }
+            navArgument(ArgCommentId) { type = NavType.IntType }
         ),
         deepLinks = listOf(
             navDeepLink {
-                uriPattern = DEEPLINK_COMMENT_ID
+                uriPattern = DeeplinkCommentId
             }
         )
     ) { entry ->
         CommentDetailsScreen(
-            commentId = entry.arguments?.getInt(ARG_COMMENT_ID)!!,
-            onShowPostDetails = { navController.navigate(Screen.PostDetails.routeOf(it)) },
+            commentId = entry.arguments?.getInt(ArgCommentId)!!,
+            onShowPostDetails = { navController.navigate(NavNode.PostDetails.routeOf(it)) },
             onNavigateUp = { navController.popBackStack() }
         )
     }
 }
 
-private fun NavGraphBuilder.addPostCommentsScreen(navController: NavHostController) {
+private fun NavGraphBuilder.addPostCommentsNode(navController: NavHostController) {
     composable(
-        route = Screen.PostComments.route,
+        route = NavNode.PostComments.route,
         arguments = listOf(
-            navArgument(ARG_POST_ID) { type = NavType.IntType }
+            navArgument(ArgPostId) { type = NavType.IntType }
         )
     ) { entry ->
         PostCommentsScreen(
-            postId = entry.arguments?.getInt(ARG_POST_ID)!!,
-            onShowCommentDetails = { navController.navigate(Screen.CommentDetails.routeOf(it)) },
+            postId = entry.arguments?.getInt(ArgPostId)!!,
+            onShowCommentDetails = { navController.navigate(NavNode.CommentDetails.routeOf(it)) },
             onNavigateUp = { navController.popBackStack() }
         )
     }
@@ -212,39 +212,39 @@ private fun NavGraphBuilder.addPostCommentsScreen(navController: NavHostControll
 
 private fun NavGraphBuilder.addUserTree(navController: NavHostController) {
     navigation(
-        route = Screen.UserRoot.route,
-        startDestination = Screen.UserLanding.route
+        route = NavNode.UserRoot.route,
+        startDestination = NavNode.UserLanding.route
     ) {
-        addUserLandingScreen(navController)
-        addUserDetailsScreen(navController)
-        addUserPostsScreen(navController)
+        addUserLandingNode(navController)
+        addUserDetailsNode(navController)
+        addUserPostsNode(navController)
     }
 }
 
-private fun NavGraphBuilder.addUserLandingScreen(navController: NavHostController) {
-    composable(Screen.UserLanding.route) {
+private fun NavGraphBuilder.addUserLandingNode(navController: NavHostController) {
+    composable(NavNode.UserLanding.route) {
         UserLandingScreen(
-            onShowUserDetails = { navController.navigate(Screen.UserDetails.routeOf(it)) },
-            onShowRawData = { navController.navigate(Screen.WebViewer.routeOf(URL_RAW_USERS)) }
+            onShowUserDetails = { navController.navigate(NavNode.UserDetails.routeOf(it)) },
+            onShowRawData = { navController.navigate(NavNode.WebViewer.routeOf(UrlRawUsers)) }
         )
     }
 }
 
-private fun NavGraphBuilder.addUserDetailsScreen(navController: NavHostController) {
+private fun NavGraphBuilder.addUserDetailsNode(navController: NavHostController) {
     composable(
-        route = Screen.UserDetails.route,
+        route = NavNode.UserDetails.route,
         arguments = listOf(
-            navArgument(ARG_USER_ID) { type = NavType.IntType }
+            navArgument(ArgUserId) { type = NavType.IntType }
         ),
         deepLinks = listOf(
             navDeepLink {
-                uriPattern = DEEPLINK_USER_ID
+                uriPattern = DeeplinkUserId
             }
         )
     ) { entry ->
         UserDetailsScreen(
-            userId = entry.arguments?.getInt(ARG_USER_ID)!!,
-            onShowUserPosts = { navController.navigate(Screen.UserPosts.routeOf(it)) },
+            userId = entry.arguments?.getInt(ArgUserId)!!,
+            onShowUserPosts = { navController.navigate(NavNode.UserPosts.routeOf(it)) },
             onNavigateUp = { navController.popBackStack() }
         )
     }
@@ -253,9 +253,9 @@ private fun NavGraphBuilder.addUserDetailsScreen(navController: NavHostControlle
 // endregion
 // region Settings
 
-private fun NavGraphBuilder.addWebViewerScreen() {
+private fun NavGraphBuilder.addWebViewerNode() {
     activity(
-        route = Screen.WebViewer.route
+        route = NavNode.WebViewer.route
     ) {
         activityClass = WebViewerActivity::class
         argument(WebViewerActivity.EXTRA_URL) { type = NavType.StringType }

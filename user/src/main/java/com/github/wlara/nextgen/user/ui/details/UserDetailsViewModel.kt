@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.wlara.nextgen.core.ext.friendlyMessage
-import com.github.wlara.nextgen.core.navigation.ARG_USER_ID
+import com.github.wlara.nextgen.core.navigation.ArgUserId
 import com.github.wlara.nextgen.user.model.User
 import com.github.wlara.nextgen.user.repo.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,7 +30,7 @@ class UserDetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UserDetailsUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val userId = savedStateHandle.get<Int>(ARG_USER_ID)!!
+    private val userId = savedStateHandle.get<Int>(ArgUserId)!!
 
     init {
         refresh()
