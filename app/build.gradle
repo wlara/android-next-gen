@@ -60,7 +60,6 @@ dependencies {
     implementation androidXDependencies.composeUi
     implementation androidXDependencies.composeUiToolingPreview
     implementation androidXDependencies.composeMaterial
-    implementation androidXDependencies.composeMaterialIcons
     implementation androidXDependencies.activityCompose
     implementation androidXDependencies.navigationCompose
     implementation androidXDependencies.hiltNavigationCompose

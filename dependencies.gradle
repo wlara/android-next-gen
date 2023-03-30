@@ -41,7 +41,6 @@ ext {
             composeUiTooling       : "androidx.compose.ui:ui-tooling:$versions.androidXCompose",
             composeUiToolingPreview: "androidx.compose.ui:ui-tooling-preview:$versions.androidXCompose",
             composeMaterial        : "androidx.compose.material:material:$versions.androidXCompose",
-            composeMaterialIcons   : "androidx.compose.material:material-icons-extended:$versions.androidXCompose",
             activityCompose        : "androidx.activity:activity-compose:$versions.androidXActivityCompose",
             navigationCompose      : "androidx.navigation:navigation-compose:$versions.androidXNavigationCompose",
             hiltNavigationCompose  : "androidx.hilt:hilt-navigation-compose:$versions.androidXHiltNavigationCompose"
